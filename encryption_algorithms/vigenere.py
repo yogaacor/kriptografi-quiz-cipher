@@ -1,22 +1,35 @@
-# vigenere.py
-def vigenere_encrypt(plaintext, key):
+# Fungsi Vigenere
+def encrypt_vigenere(plaintext, key):
     key = key.upper()
-    plaintext = plaintext.upper()
-    ciphertext = ""
-    for i in range(len(plaintext)):
-        if plaintext[i].isalpha():
-            ciphertext += chr(((ord(plaintext[i]) - 65) + (ord(key[i % len(key)]) - 65)) % 26 + 65)
-        else:
-            ciphertext += plaintext[i]
-    return ciphertext
+    result = ""
+    key_length = len(key)
+    key_index = 0
 
-def vigenere_decrypt(ciphertext, key):
-    key = key.upper()
-    ciphertext = ciphertext.upper()
-    plaintext = ""
-    for i in range(len(ciphertext)):
-        if ciphertext[i].isalpha():
-            plaintext += chr(((ord(ciphertext[i]) - 65) - (ord(key[i % len(key)]) - 65)) % 26 + 65)
+    for char in plaintext:
+        if char.isalpha():
+            offset = ord('A') if char.isupper() else ord('a')
+            shift = (ord(char) - offset + ord(key[key_index]) - ord('A')) % 26
+            result += chr(shift + offset)
+            key_index = (key_index + 1) % key_length
         else:
-            plaintext += ciphertext[i]
-    return plaintext
+            result += char
+
+    return result
+
+def decrypt_vigenere(ciphertext, key):
+    key = key.upper()
+    result = ""
+    key_length = len(key)
+    key_index = 0
+
+    for char in ciphertext:
+        if char.isalpha():
+            offset = ord('A') if char.isupper() else ord('a')
+            shift = (ord(char) - offset - (ord(key[key_index]) - ord('A'))) % 26
+            result += chr(shift + offset)
+            key_index = (key_index + 1) % key_length
+        else:
+            result += char
+
+    return result
+
